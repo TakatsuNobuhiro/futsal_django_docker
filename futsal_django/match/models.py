@@ -2,6 +2,8 @@ from django.db import models
 
 
 class Club(models.Model):
+    def __str__(self):
+        return self.name
     class Meta:
         verbose_name = 'チーム'
         verbose_name_plural = 'チーム'
