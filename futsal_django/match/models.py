@@ -17,6 +17,8 @@ class Club(models.Model):
     # facebook
 
 class Player(models.Model):
+    def __str__(self):
+        return self.last_name + self.first_name
     class Meta:
         verbose_name = '選手'
         verbose_name_plural = '選手'
@@ -36,7 +38,7 @@ class Player(models.Model):
         (4, "ゴレイロ（GOLEIRO）")
     )
     position = models.IntegerField("ポジション", choices=POSITION_LIST)
-    profile = models.TextField("プロフィール")
+    # profile = models.TextField("プロフィール")
 
     # image
     # twitter
