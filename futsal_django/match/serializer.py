@@ -8,4 +8,5 @@ from .models import Player
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
-        fields = ['first_name', 'last_name', 'uniform_number','position']
+        fields = ['id', 'club_id', 'first_name', 'last_name', 'uniform_number',
+                  'position', 'birth_day']
