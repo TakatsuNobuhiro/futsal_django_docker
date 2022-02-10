@@ -79,12 +79,12 @@ WSGI_APPLICATION = 'futsal_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'main',
+        'USER': 'root',
+        'PASSWORD': 'password',
         'HOST': 'db',
-        'PORT': 5432,
+        'PORT': 3306,
     }
 }
 

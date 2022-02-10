@@ -1,21 +1,24 @@
 version: '3'
 services:
   db:
-    container_name: postgres
-    image: postgres
+    container_name: mysql
+    platform: linux/x86_64
+    image: mysql:5.7.22
     ports:
-      - "5432:5432"
+      - "3306:3306"
+    expose:
+      - "3306"
     volumes:
-      - ./db_data:/var/lib/postgresql
+      - ./db_data:/var/lib/mysql
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      MYSQL_DATABASE: main
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
     restart: always
   web:
     container_name: django
     build: ./dockerfiles/django_docker/
-    command: python3 futsal_django/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/workspace
     ports:
