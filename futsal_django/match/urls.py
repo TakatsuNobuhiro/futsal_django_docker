@@ -3,7 +3,7 @@ from match import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
-    path('players', views.PlayerList.as_view()),
+修正    path('players', views.PlayerList.as_view()),
     path('player/<int:id>/', views.PlayerDetail.as_view())
 ]
 
