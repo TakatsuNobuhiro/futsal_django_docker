@@ -4,6 +4,4 @@ djangorestframework
 django-filter
 django-webpack-loader
 django-cors-headers
-mysqlclient==2.0.1
-django-mysql==3.9
 pytz
