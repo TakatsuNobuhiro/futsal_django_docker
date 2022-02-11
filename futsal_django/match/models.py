@@ -44,7 +44,7 @@ class Player(models.Model):
         (4, "ゴレイロ（GOLEIRO）")
     )
     position = models.IntegerField("ポジション", choices=POSITION_LIST)
-    # profile = models.TextField("プロフィール")
+    profile = models.TextField("プロフィール")
 
     # image
     # twitter
