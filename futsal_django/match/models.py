@@ -7,6 +7,8 @@ class Club(models.Model):
     class Meta:
         verbose_name = 'チーム'
         verbose_name_plural = 'チーム'
+        db_table = 'club'
+        ordering = 'name'
 
     name = models.CharField("チーム名", max_length=32,
                             help_text="（例）東京工業大学フットサル部 Tokyo Tech")
@@ -24,6 +26,8 @@ class Player(models.Model):
     class Meta:
         verbose_name = '選手'
         verbose_name_plural = '選手'
+        db_table = 'player'
+        ordering = 'birth_day'
 
     club = models.ForeignKey(to=Club, on_delete=models.CASCADE)
     last_name = models.CharField("苗字（漢字）", max_length=32,
