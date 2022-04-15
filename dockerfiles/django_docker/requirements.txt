@@ -5,3 +5,8 @@ django-filter
 django-webpack-loader
 django-cors-headers
 pytz
+
+#ER図出力のためのライブラリ
+pygraphviz
+pydotplus
+django-extensions
