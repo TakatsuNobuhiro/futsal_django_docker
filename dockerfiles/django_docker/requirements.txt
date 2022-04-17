@@ -13,3 +13,4 @@ django-extensions
 
 #テストに必要なライブラリ
 factory_boy
+Faker
