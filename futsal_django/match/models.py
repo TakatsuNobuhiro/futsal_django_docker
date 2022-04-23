@@ -12,7 +12,7 @@ class Club(models.Model):
 
     name = models.CharField("チーム名", max_length=32,
                             help_text="（例）東京工業大学フットサル部 Tokyo Tech")
-    homepage_url = models.URLField("ホームページ（URL）")
+    homepage_url = models.URLField("ホームページ（URL）", blank=True, null=True)
 
     # image
     # category
@@ -21,22 +21,29 @@ class Club(models.Model):
     # facebook
 
 
-class Player(models.Model):
+class Member(models.Model):
     def __str__(self):
         return self.last_name + self.first_name
 
     class Meta:
         verbose_name_plural = '選手'
-        db_table = 'player'
+        db_table = 'member'
         ordering = ['birth_day']
 
     club = models.ForeignKey(to=Club, on_delete=models.CASCADE)
+    MEMBER_TYPE = (
+        (1, "プレイヤー"),
+        (2, "スタッフ"),
+        (3, "スタッフ兼プレイヤー"),
+    )
+    type = models.IntegerField("種類", choices=MEMBER_TYPE)
     last_name = models.CharField("苗字（漢字）", max_length=32,
                                  help_text="(例) 森岡")
     first_name = models.CharField("名前（漢字）", max_length=32, help_text="（例）薫")
     uniform_number = models.IntegerField("背番号",
                                          help_text="所属チームでの背番号")
-    birth_day = models.DateField("誕生日", help_text="（例）1998-06-22")
+    birth_day = models.DateField("誕生日", help_text="（例）1998-06-22", blank=True,
+                                 null=True)
 
     POSITION_LIST = (
         (1, "フィクソ（FIXO）"),
@@ -45,7 +52,7 @@ class Player(models.Model):
         (4, "ゴレイロ（GOLEIRO）")
     )
     position = models.IntegerField("ポジション", choices=POSITION_LIST)
-    profile = models.TextField("プロフィール")
+    profile = models.TextField("プロフィール", blank=True, null=True)
 
     # image
     # twitter
@@ -116,6 +123,16 @@ class Place(models.Model):
     address = models.TextField("住所")
 
 
+class Referee(models.Model):
+    class Meta:
+        verbose_name_plural = "審判"
+        db_table = "referee"
+
+    last_name = models.CharField("苗字（漢字）", max_length=32,
+                                 help_text="(例) 森岡")
+    first_name = models.CharField("名前（漢字）", max_length=32, help_text="（例）薫")
+
+
 class Game(models.Model):
     def __str__(self):
         return str(
@@ -136,15 +153,21 @@ class Game(models.Model):
     date = models.DateTimeField("キックオフ時刻")
     place = models.ForeignKey(verbose_name="場所", to=Place,
                               on_delete=models.CASCADE)
-    goals = models.ManyToManyField(Player, through="Goal", related_name="goals")
-    shoots = models.ManyToManyField(Player, through="Shoot",
+    goals = models.ManyToManyField(Member, through="Goal", related_name="goals")
+    shoots = models.ManyToManyField(Member, through="Shoot",
                                     related_name="shoots")
-    warnings = models.ManyToManyField(Player, through="Warning",
+    warnings = models.ManyToManyField(Member, through="Warning",
                                       related_name="warnings")
-    members = models.ManyToManyField(Player, through="Member",
+    members = models.ManyToManyField(Member, through="RegisteredMember",
                                      related_name="members")
-    staffs = models.ManyToManyField(Player, through="Staff",
+    staffs = models.ManyToManyField(Member, through="Staff",
                                     related_name="staffs")
+    first_referee = models.OneToOneField(to=Referee, on_delete=models.PROTECT,
+                                         related_name="first_referee")
+    second_referee = models.OneToOneField(to=Referee, on_delete=models.PROTECT,
+                                          related_name="second_referee")
+    third_referee = models.OneToOneField(to=Referee, on_delete=models.PROTECT,
+                                         related_name="third_referee")
 
 
 class Goal(models.Model):
@@ -160,7 +183,7 @@ class Goal(models.Model):
     )
     half = models.BooleanField("前半or後半", choices=HALF_CHOICES)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    player = models.ForeignKey(Member, on_delete=models.CASCADE)
 
 
 class Shoot(models.Model):
@@ -176,7 +199,7 @@ class Shoot(models.Model):
     )
     half = models.BooleanField("前半or後半", choices=HALF_CHOICES)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    player = models.ForeignKey(Member, on_delete=models.CASCADE)
 
 
 class Warning(models.Model):
@@ -192,21 +215,22 @@ class Warning(models.Model):
     )
     half = models.BooleanField("前半or後半", choices=HALF_CHOICES)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    player = models.ForeignKey(Member, on_delete=models.CASCADE)
 
 
-class Member(models.Model):
+class RegisteredMember(models.Model):
     class Meta:
         verbose_name_plural = "登録メンバー"
-        db_table = "member"
+        db_table = "registered_member"
 
-    MEMBER_CHOICES = (
+    REGISTER_MEMBER_CHOICES = (
         (False, "ベンチ"),
         (True, "先発")
     )
-    starting_member = models.BooleanField("先発orベンチ", choices=MEMBER_CHOICES)
+    starting_member = models.BooleanField("先発orベンチ",
+                                          choices=REGISTER_MEMBER_CHOICES)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    player = models.ForeignKey(Member, on_delete=models.CASCADE)
 
 
 class Staff(models.Model):
@@ -215,4 +239,4 @@ class Staff(models.Model):
         db_table = "staff"
 
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
