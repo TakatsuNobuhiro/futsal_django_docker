@@ -72,6 +72,7 @@ class League(models.Model):
     teams = models.ManyToManyField("Club")
 
 
+"""
 class Season(models.Model):
     def __str__(self):
         return self.name
@@ -240,3 +241,4 @@ class Staff(models.Model):
 
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
+"""
