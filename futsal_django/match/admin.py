@@ -1,13 +1,10 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Referee, Club, Game, Place, Goal, Node, Category, Season, \
-    League, Shoot, Member, Warning, Staff
+from .models import Member, Club, League
 
 
-@admin.register(Referee, Game, Club, Place, Goal, Node, Category, Season,
-                League,
-                Shoot, Member, Warning, Staff)
+@admin.register(Member, Club, League, )
 class PlayerAdmin(admin.ModelAdmin):
     pass
 
