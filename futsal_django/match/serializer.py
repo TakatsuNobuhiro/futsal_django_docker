@@ -9,7 +9,7 @@ class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         fields = ['id', 'club_id', 'first_name', 'last_name', 'uniform_number',
-                  'position', 'birth_day']
+                  'position', 'birth_day', 'profile', 'type']
 
 
 class ClubSerializer(serializers.ModelSerializer):
