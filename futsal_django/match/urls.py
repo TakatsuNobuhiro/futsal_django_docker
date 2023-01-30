@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from futsal_django.match import views
+from . import views
 
 urlpatterns = [
     path('member', views.MemberList.as_view()),
