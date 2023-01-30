@@ -8,6 +8,6 @@ from .models import Member, Club, League
 class PlayerAdmin(admin.ModelAdmin):
     pass
 
-# @admin.register(Club)
-# class ClubAdmin(admin.ModelAdmin):
-#     pass
+@admin.register(Club)
+class ClubAdmin(admin.ModelAdmin):
+    pass
